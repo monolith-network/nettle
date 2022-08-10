@@ -100,7 +100,7 @@ namespace NETTLE
         int sizeSent;
         size_t remaining  = bufferLen;
         const char *cBuff = static_cast<const char*>(buffer);
-
+        int errorCount {0};
         while(remaining > 0)
         {
             do
@@ -114,11 +114,18 @@ namespace NETTLE
 
             if(sizeSent == -1)
             {
+               if (errorCount++ > 5) 
+               {
+                  return;
+               }
+
                 infoCb(SocketError::SOCKET_WRITE);
             }
-
-            cBuff     += sizeSent;
-            remaining -= sizeSent;
+            else
+            {
+               cBuff     += sizeSent;
+               remaining -= sizeSent;
+            }
         }
         return;
     }
