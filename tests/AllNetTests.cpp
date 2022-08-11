@@ -17,7 +17,7 @@ namespace
 
     // -----------------------------------------------------------------------------------------------------------------
 
-    class TestConnectionHandler : public NETTLE::TcpConnectionHandler {
+    class TestConnectionHandler : public nettle::TcpConnectionHandler {
 
     public:
         TestConnectionHandler(std::string name) : name(name), gotAConnection(false) {
@@ -43,7 +43,7 @@ namespace
             std::cout << "Handler [ " << name << " ] was informed that the server stopped!" << std::endl;
         }
 
-        void newConnection(NETTLE::Socket connection) override {
+        void newConnection(nettle::Socket connection) override {
 
             gotAConnection = true;
 
@@ -68,7 +68,7 @@ namespace
     // -----------------------------------------------------------------------------------------------------------------
 
     template <std::size_t N>
-    class UdpConenctionHandler : public NETTLE::UdpConnectionHandlerN<N> {
+    class UdpConenctionHandler : public nettle::UdpConnectionHandlerN<N> {
 
     public:
         UdpConenctionHandler() : gotConn(false) {
@@ -111,9 +111,9 @@ TEST_GROUP(Tcp)
 
 TEST(Tcp, TcpTest)
 {
-    NETTLE::HostPort hp("127.0.0.1", TCP_TEST_PORT);
+    nettle::HostPort hp("127.0.0.1", TCP_TEST_PORT);
     TestConnectionHandler handler("TcpTest");
-    NETTLE::TcpServer server(hp, handler);
+    nettle::TcpServer server(hp, handler);
 
     CHECK_FALSE_TEXT(server.stop(), "Stopped inactive server?");
 
@@ -123,7 +123,7 @@ TEST(Tcp, TcpTest)
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-    NETTLE::Writer writer(hp, NETTLE::WriterType::TCP);
+    nettle::Writer writer(hp, nettle::WriterType::TCP);
 
     if(writer.hasError()) {
 
@@ -152,10 +152,10 @@ TEST_GROUP(Udp)
 
 TEST(Udp, UdpTest)
 {
-    NETTLE::HostPort hp("127.0.0.1", UDP_TEST_PORT);
+    nettle::HostPort hp("127.0.0.1", UDP_TEST_PORT);
     UdpConenctionHandler<10> handler;
 
-    NETTLE::UdpServerN<10> server(hp, handler);
+    nettle::UdpServerN<10> server(hp, handler);
 
     CHECK_FALSE_TEXT(server.stop(), "Stopped inactive server?");
 
@@ -165,7 +165,7 @@ TEST(Udp, UdpTest)
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-    NETTLE::Writer writer(hp, NETTLE::WriterType::UDP);
+    nettle::Writer writer(hp, nettle::WriterType::UDP);
 
     if(writer.hasError()) {
 

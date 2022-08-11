@@ -10,7 +10,7 @@
 //!
 //! \file ConnectionHandler.hpp
 //!
-namespace NETTLE
+namespace nettle
 {
     //!
     //! \class TcpConnectionHandler
@@ -20,7 +20,7 @@ namespace NETTLE
         virtual void serverStarted()  = 0;
         virtual void serverStopping() = 0;
         virtual void serverStopped()  = 0;
-        virtual void newConnection(NETTLE::Socket connection) = 0;
+        virtual void newConnection(nettle::Socket connection) = 0;
 
     };
 

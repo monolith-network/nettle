@@ -11,7 +11,7 @@
 #include <iostream>
 
 namespace {
-    class Handler : public NETTLE::TcpConnectionHandler {
+    class Handler : public nettle::TcpConnectionHandler {
 
     public:
         Handler(std::string name) : name(name) {
@@ -37,7 +37,7 @@ namespace {
             std::cout << "Handler [ " << name << " ] was informed that the server stopped!" << std::endl;
         }
 
-        void newConnection(NETTLE::Socket connection) override {
+        void newConnection(nettle::Socket connection) override {
 
             char buffer[15];
             connection.socketReadIn(buffer, 15);
@@ -63,9 +63,9 @@ void signal_handler(int s){
 
 int main() {
 
-    NETTLE::HostPort hp("127.0.0.1", 4097);
+    nettle::HostPort hp("127.0.0.1", 4097);
     Handler handler("TcpExample");
-    NETTLE::TcpServer server(hp, handler);
+    nettle::TcpServer server(hp, handler);
 
     signal(SIGINT, signal_handler);
 
@@ -82,7 +82,7 @@ int main() {
 
         std::cout << "Writing to server ..." << std::endl;
 
-        NETTLE::Writer writer(hp, NETTLE::WriterType::TCP);
+        nettle::Writer writer(hp, nettle::WriterType::TCP);
 
         if(writer.hasError()) {
 

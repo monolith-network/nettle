@@ -1,9 +1,7 @@
 #include "Socket.hpp"
-
-#include <iostream>
 #include <cstring>
 
-namespace NETTLE
+namespace nettle
 {
     // ---------------------------------------------------------------
     // socket
@@ -95,7 +93,7 @@ namespace NETTLE
     // write
     // ---------------------------------------------------------------
 
-    void Socket::socketWriteOut(const void* buffer, int bufferLen)
+    int Socket::socketWriteOut(const void* buffer, int bufferLen)
     {
         int sizeSent;
         size_t remaining  = bufferLen;
@@ -103,31 +101,20 @@ namespace NETTLE
         int errorCount {0};
         while(remaining > 0)
         {
-            do
-            {
-                sizeSent = send(socketFd,
-                                cBuff,
-                                remaining,
-                                0);
-            }
-            while(sizeSent == -1 && EINTR == errno);
+            sizeSent = send(socketFd,
+                           cBuff,
+                           remaining,
+                           0);
 
             if(sizeSent == -1)
             {
-               if (errorCount++ > 5) 
-               {
-                  return;
-               }
-
-                infoCb(SocketError::SOCKET_WRITE);
+               return -1;
             }
-            else
-            {
-               cBuff     += sizeSent;
-               remaining -= sizeSent;
-            }
+            
+            cBuff     += sizeSent;
+            remaining -= sizeSent;
         }
-        return;
+        return sizeSent;
     }
 
     // ---------------------------------------------------------------
@@ -143,18 +130,14 @@ namespace NETTLE
 
         while(remaining > 0)
         {
-            do
-            {
-                recvSize = recv(socketFd,
-                                cBuff,
-                                remaining,
-                                0);
-            }
-            while(recvSize == -1 && EINTR == errno);
+            recvSize = recv(socketFd,
+                           cBuff,
+                           remaining,
+                           0);
 
             if(recvSize == -1)
             {
-                return recvSize;
+               return recvSize;
             }
 
             if(0 == recvSize)

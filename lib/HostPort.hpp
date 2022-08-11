@@ -7,20 +7,20 @@
 
 #include <string>
 
-namespace NETTLE
+namespace nettle
 {
-    class HostPort {
-    public:
-        HostPort(std::string address, short port);
+   class HostPort
+   {
+   public:
+      HostPort(std::string address, short port);
 
-        std::string getAddress() const;
-        short getPort() const;
-    private:
-        std::string address;
-        short port;
-    };
+      std::string getAddress() const;
+      short getPort() const;
+
+   private:
+      std::string address;
+      short port;
+   };
 }
 
-
-
-#endif //NETTLE_HOSTPORT_HPP
+#endif // NETTLE_HOSTPORT_HPP

@@ -12,7 +12,7 @@
 namespace {
 
     template <std::size_t N>
-    class UdpConenctionHandler : public NETTLE::UdpConnectionHandlerN<N> {
+    class UdpConenctionHandler : public nettle::UdpConnectionHandlerN<N> {
 
     public:
         UdpConenctionHandler() {
@@ -50,10 +50,10 @@ void signal_handler(int s){
 
 int main() {
 
-    NETTLE::HostPort hp("127.0.0.1", 6066);
+    nettle::HostPort hp("127.0.0.1", 6066);
     UdpConenctionHandler<15> handler;
 
-    NETTLE::UdpServerN<15> server(hp, handler);
+    nettle::UdpServerN<15> server(hp, handler);
 
     signal(SIGINT, signal_handler);
 
@@ -70,7 +70,7 @@ int main() {
 
         std::cout << "Writing to server ..." << std::endl;
 
-        NETTLE::Writer writer(hp, NETTLE::WriterType::UDP);
+        nettle::Writer writer(hp, nettle::WriterType::UDP);
 
         if(writer.hasError()) {
 

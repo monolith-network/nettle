@@ -14,14 +14,14 @@ namespace {
     bool run_example;
 
 
-    class MySocketObj : protected NETTLE::Socket{
+    class MySocketObj : protected nettle::Socket{
 
     public:
-        MySocketObj(NETTLE::HostPort hostAndPort) : Socket() {
+        MySocketObj(nettle::HostPort hostAndPort) : Socket() {
 
             if ((this->socketFd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
             {
-                this->infoCb(NETTLE::SocketError::SOCKET_CREATE);
+                this->infoCb(nettle::SocketError::SOCKET_CREATE);
                 return;
             }
 
@@ -32,14 +32,14 @@ namespace {
 
             if (::bind(this->socketFd, (sockaddr*)&this->sockAddr, sizeof(this->sockAddr)) < 0)
             {
-                this->infoCb(NETTLE::SocketError::SOCKET_BIND);
+                this->infoCb(nettle::SocketError::SOCKET_BIND);
                 return;
             }
 
             // mark the socket so it will listen for incoming connections, with 10 Maximum pending connections
             if (::listen(this->socketFd, 10) < 0)
             {
-                this->infoCb(NETTLE::SocketError::SOCKET_LISTEN);
+                this->infoCb(nettle::SocketError::SOCKET_LISTEN);
                 return;
             }
 
@@ -84,7 +84,7 @@ int main() {
 
     signal(SIGINT, signal_handler);
 
-    NETTLE::HostPort hp("127.0.0.1", 4097);
+    nettle::HostPort hp("127.0.0.1", 4097);
 
     MySocketObj mySocketObject(hp);
 

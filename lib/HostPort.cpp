@@ -6,21 +6,23 @@
 
 #include <sstream>
 
-namespace NETTLE
+namespace nettle
 {
-    HostPort::HostPort(std::string address, short port) : address(address),
-                                                          port(port) {
+   HostPort::HostPort(std::string address, short port) : address(address),
+                                                         port(port)
+   {
+   }
 
-    }
+   std::string HostPort::getAddress() const
+   {
 
-    std::string HostPort::getAddress() const {
+      return address;
+   }
 
-        return address;
-    }
+   short HostPort::getPort() const
+   {
 
-    short HostPort::getPort() const {
-
-        return port;
-    }
+      return port;
+   }
 
 }
