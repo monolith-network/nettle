@@ -52,7 +52,7 @@ namespace nettle
     //init
     // ---------------------------------------------------------------
 
-    void Socket::setupSocket(int socketFd, sockaddr_in sockAddr)
+    bool Socket::setupSocket(int socketFd, sockaddr_in sockAddr)
     {
         if(!this->isInitd)
         {
@@ -63,20 +63,20 @@ namespace nettle
             if (setsockopt(this->socketFd, SOL_SOCKET, SO_RCVTIMEO, (char*)&recvTimeout, sizeof(recvTimeout)) < 0)
             {
                 infoCb(SocketError::SET_SOCK_OPT_RECV_TO);
-                return;
+                return false;
             }
 
             if (setsockopt(this->socketFd, SOL_SOCKET, SO_SNDTIMEO, (char*)&sendTimeout, sizeof(sendTimeout)) < 0)
             {
                 infoCb(SocketError::SET_SOCK_OPT_SEND_TO);
-                return;
+                return false;
             }
 
             int enable = 1;
             if (setsockopt(this->socketFd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
             {
                 infoCb(SocketError::SOCKET_REUSEADDR);
-                return;
+                return false;
             }
             
             this->isInitd  = true;
@@ -84,9 +84,9 @@ namespace nettle
         else
         {
             infoCb(SocketError::ATTEMPT_INIT_SETUP_SOCKET);
-            return;
+            return false;
         }
-        return;
+        return true;
     }
 
     // ---------------------------------------------------------------

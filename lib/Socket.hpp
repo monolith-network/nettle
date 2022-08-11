@@ -140,8 +140,9 @@ namespace nettle
       //! \brief Setup a socket - Errors reported via errorCallback
       //! \param socketFd Socket file desc
       //! \param sockAddr Socket address
+      //! \returns true iff socket is setup
       //!
-      void setupSocket(int socketFd, sockaddr_in sockAddr);
+      bool setupSocket(int socketFd, sockaddr_in sockAddr);
 
       //!
       //! \brief Close the socket

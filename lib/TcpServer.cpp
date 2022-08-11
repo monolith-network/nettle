@@ -115,10 +115,12 @@ namespace nettle
                 }
 
                 Socket clientSocket(server->errorCb);
-                clientSocket.setupSocket(clientFd, clientAddr);
-
-                server->connectionHandler.newConnection(clientSocket);
-
+                
+                if (clientSocket.setupSocket(clientFd, clientAddr) )
+                {
+                  server->connectionHandler.newConnection(clientSocket);
+                }
+                
                 std::this_thread::sleep_for(std::chrono::milliseconds(server->msSleepBetweenReq));
              }
           } // End func
