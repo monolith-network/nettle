@@ -1,5 +1,6 @@
 #include "TcpServer.hpp"
 #include <cstring>
+#include <thread>
 
 namespace nettle
 {
@@ -86,7 +87,7 @@ namespace nettle
       threadRunning = true;
 
       serverThread = std::thread(
-          [](TcpServer *server)
+          [](TcpServer *server, std::atomic<uint32_t>* numThreads)
           {
              server->connectionHandler.serverStarted();
 
@@ -114,18 +115,38 @@ namespace nettle
                   continue;
                 }
 
-                Socket clientSocket(server->errorCb);
-                
-                if (clientSocket.setupSocket(clientFd, clientAddr) )
+                Socket* clientSocket = new Socket(server->errorCb);
+                if (numThreads->load() < MAX_CONNECTION_THREADS && clientSocket->setupSocket(clientFd, clientAddr))
                 {
-                  server->connectionHandler.newConnection(clientSocket);
+                  auto run_it = [](TcpServer *server, Socket* socket, std::atomic<uint32_t>* numThreads){
+
+                     // Indicate in the atomic that the thread has started
+                     numThreads->fetch_add(1);
+
+                     // Let the handler do whatever it needs but as a reference so
+                     // its less likely that they accidentlly destroy the socket 
+                     server->connectionHandler.newConnection(*socket);
+
+                     // Ensure the socket was closed
+                     socket->socketClose();
+
+                     // Decrement the atomic to indicate that the thread is about to die
+                     numThreads->fetch_sub(1);
+
+                     // Cleanup the socket
+                     delete socket;
+                  };
+
+                  // Start the thread and cut it loose
+                  std::thread(run_it, server, clientSocket, numThreads).detach();
                 }
                 
                 std::this_thread::sleep_for(std::chrono::milliseconds(server->msSleepBetweenReq));
              }
           } // End func
           ,
-          this);
+          this,
+          &_num_threads);
 
       return true;
    }
