@@ -6,6 +6,7 @@ else()
     set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread" )
 endif(MSVC)
 
+find_package (Threads REQUIRED)
 
 find_package(Nettle REQUIRED)
 include_directories(${NETTLE_INCLUDE_DIRS})
@@ -29,4 +30,5 @@ target_link_libraries(rawSocket
         PRIVATE
         ${ORBIT_LIBRARIES}
         ${NETTLE_LIBRARIES}
+        Threads::Threads
         )

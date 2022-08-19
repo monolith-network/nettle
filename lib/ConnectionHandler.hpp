@@ -20,7 +20,10 @@ namespace nettle
         virtual void serverStarted()  = 0;
         virtual void serverStopping() = 0;
         virtual void serverStopped()  = 0;
-        virtual void newConnection(nettle::Socket connection) = 0;
+
+        //! \brief Receive a new socket connection
+        //! \param connection The connection that was established
+        virtual void newConnection(nettle::Socket &connection) = 0;
 
     };
 
