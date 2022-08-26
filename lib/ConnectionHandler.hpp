@@ -20,6 +20,12 @@ namespace nettle
         virtual void serverStarted()  = 0;
         virtual void serverStopping() = 0;
         virtual void serverStopped()  = 0;
+
+        //! \brief Retrieve a new connection
+        //! \note This call is not handled asynchronously and will be 
+        //!       blocking the tcp server. It is up to the callee to 
+        //!       manage any asynchronous work to ensure that the 
+        //!       server is non blocking 
         virtual void newConnection(nettle::Socket connection) = 0;
 
     };
