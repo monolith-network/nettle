@@ -63,6 +63,8 @@ namespace nettle
       std::atomic<bool> threadRunning;
       std::mutex threadMut;
       std::thread serverThread;
+      static constexpr uint32_t MAX_CONNECTION_THREADS = 20;
+      std::atomic<uint32_t> _num_threads {0};
    };
 }
 

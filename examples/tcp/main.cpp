@@ -37,7 +37,7 @@ namespace {
             std::cout << "Handler [ " << name << " ] was informed that the server stopped!" << std::endl;
         }
 
-        void newConnection(nettle::Socket connection) override {
+        void newConnection(nettle::Socket& connection) override {
 
             char buffer[15];
             connection.socketReadIn(buffer, 15);

@@ -27,7 +27,6 @@ namespace nettle
         //!       manage any asynchronous work to ensure that the 
         //!       server is non blocking 
         virtual void newConnection(nettle::Socket connection) = 0;
-
     };
 
     //!
