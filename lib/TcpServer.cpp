@@ -79,7 +79,6 @@ namespace nettle
 
          if (threadRunning.load())
          {
-            std::cerr << "Thread already started" << std::endl;
             return false;
          }
       }
@@ -95,7 +94,6 @@ namespace nettle
              {
                 if (!server->ready)
                 {
-                   std::cerr << "Server not ready" << std::endl;
                    return;
                 }
 
@@ -159,7 +157,6 @@ namespace nettle
 
       if (!threadRunning.load())
       {
-         std::cerr << "Thread not running" << std::endl;
          return false;
       }
 

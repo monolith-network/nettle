@@ -6,11 +6,11 @@ link_directories(${CPPUTEST_LIBRARIES})
 
 find_package (Threads REQUIRED)
 
-add_executable(bslNetTests
+add_executable(nettleTests
         AllNetTests.cpp
         main.cpp
 )
-target_link_libraries(bslNetTests ${LIBRARY_NAME}
+target_link_libraries(nettleTests ${LIBRARY_NAME}
 
         Threads::Threads
         ${BSLCORE_LIBRARIES}
@@ -20,4 +20,4 @@ target_link_libraries(bslNetTests ${LIBRARY_NAME}
 #####################
 # Run tests
 #####################
-add_custom_command(TARGET bslNetTests COMMAND ./bslNetTests POST_BUILD)
+add_custom_command(TARGET nettleTests COMMAND ./nettleTests POST_BUILD)
