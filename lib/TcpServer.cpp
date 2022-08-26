@@ -77,23 +77,22 @@ namespace nettle
       {
          std::lock_guard<std::mutex> lock(threadMut);
 
-         if (threadRunning)
+         if (threadRunning.load())
          {
             std::cerr << "Thread already started" << std::endl;
             return false;
          }
       }
 
-      threadRunning = true;
+      threadRunning.store(true);
 
       serverThread = std::thread(
           [](TcpServer *server, std::atomic<uint32_t>* numThreads)
           {
              server->connectionHandler.serverStarted();
 
-             while (server->threadRunning)
+             while (server->threadRunning.load())
              {
-
                 if (!server->ready)
                 {
                    std::cerr << "Server not ready" << std::endl;
@@ -158,13 +157,13 @@ namespace nettle
    {
       std::lock_guard<std::mutex> lock(threadMut);
 
-      if (!threadRunning)
+      if (!threadRunning.load())
       {
          std::cerr << "Thread not running" << std::endl;
          return false;
       }
 
-      threadRunning = false;
+      threadRunning.store(false);
 
       connectionHandler.serverStopping();
 
